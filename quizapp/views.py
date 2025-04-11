@@ -20,3 +20,17 @@ def has_taken_quiz(request):
     if student.status == "done":
         return Response({"error": f'{username} has taken the quiz already'}, status=403)
     return Response({"message": "Proceed to take your quiz"})
+
+
+
+@api_view(['POST'])
+def submit_quiz(request):
+    username = request.data.get("username")
+    username = username.upper()
+    score = request.data.get("score")
+    student = Student.objects.get(username=username)
+    student.score = score 
+    student.status = "done"
+    student.save()
+    return Response({"Quiz submitted successfully!"})
+
